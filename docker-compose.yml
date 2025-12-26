@@ -1,0 +1,32 @@
+services:
+  # React Dashboard (Vite dev server)
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./app:/app
+      - ./code:/code:ro
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    stdin_open: true
+    tty: true
+
+  # Python/Jupyter for neural network development
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./code:/workspace/code
+      - ./notebooks:/workspace/notebooks
+      - ./data:/workspace/data
+      - ./notes:/workspace/notes
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''

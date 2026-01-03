@@ -4,7 +4,7 @@ export const course = {
   description: "Build neural networks from scratch, in code. From backpropagation to GPT.",
   website: "https://karpathy.ai/zero-to-hero.html",
   discord: "https://discord.gg/3zy8kqD9Cp",
-  totalDuration: "~14 hours",
+  totalDuration: "~25 hours",
 
   parts: [
     {
@@ -16,6 +16,7 @@ export const course = {
           title: "Building micrograd",
           duration: "2h 25m",
           videoId: "VMj-3S1tku0",
+          summaryFile: "The-spelled-out-intro-to-neural-networks-and-backpropagation-building-micrograd.md",
           description: "Step-by-step backpropagation and neural network training from scratch. Build a tiny autograd engine.",
           topics: [
             "Computational graphs",
@@ -26,6 +27,7 @@ export const course = {
           ],
           tasks: [
             { id: "1-watch", label: "Watch video" },
+            { id: "1-summary", label: "Read video summary" },
             { id: "1-implement", label: "Implement micrograd from scratch" },
             { id: "1-exercises", label: "Complete exercises" }
           ],
@@ -39,6 +41,7 @@ export const course = {
           title: "Building makemore",
           duration: "1h 57m",
           videoId: "PaCmpygFfXo",
+          summaryFile: "The-spelled-out-intro-to-language-modeling-building-makemore.md",
           description: "Bigram character-level language model. Introduction to torch.Tensor, language modeling framework, and negative log likelihood loss.",
           topics: [
             "Character-level language modeling",
@@ -49,6 +52,7 @@ export const course = {
           ],
           tasks: [
             { id: "2-watch", label: "Watch video" },
+            { id: "2-summary", label: "Read video summary" },
             { id: "2-implement", label: "Implement bigram model" },
             { id: "2-experiment", label: "Experiment with torch.Tensor" }
           ],
@@ -68,6 +72,7 @@ export const course = {
           title: "MLP",
           duration: "1h 15m",
           videoId: "TCH_1BHY58I",
+          summaryFile: "Building-makemore-Part-2-MLP.md",
           description: "Multilayer perceptron language model. ML basics: learning rate, hyperparameters, train/dev/test splits, under/overfitting.",
           topics: [
             "Embedding layers",
@@ -78,6 +83,7 @@ export const course = {
           ],
           tasks: [
             { id: "3-watch", label: "Watch video" },
+            { id: "3-summary", label: "Read video summary" },
             { id: "3-implement", label: "Implement MLP language model" },
             { id: "3-experiment", label: "Experiment with hyperparameters" }
           ],
@@ -89,6 +95,7 @@ export const course = {
           title: "Activations & Gradients, BatchNorm",
           duration: "1h 55m",
           videoId: "P6sfmUTpUmc",
+          summaryFile: "Building-makemore-Part-3-Activations-&-Gradients,-BatchNorm.md",
           description: "Forward pass activations, backward pass gradients, diagnostic tools. Introduction to Batch Normalization.",
           topics: [
             "Activation statistics (dead neurons, saturation)",
@@ -99,6 +106,7 @@ export const course = {
           ],
           tasks: [
             { id: "4-watch", label: "Watch video" },
+            { id: "4-summary", label: "Read video summary" },
             { id: "4-visualize", label: "Visualize activation/gradient statistics" },
             { id: "4-batchnorm", label: "Implement BatchNorm" }
           ],
@@ -112,6 +120,7 @@ export const course = {
           title: "Becoming a Backprop Ninja",
           duration: "1h 55m",
           videoId: "q8SA3rM6ckI",
+          summaryFile: "Building-makemore-Part-4-Becoming-a-Backprop-Ninja.md",
           description: "Manual backpropagation through entire network without autograd. Deep intuition for gradient flow at tensor level.",
           topics: [
             "Manual gradient computation",
@@ -123,6 +132,7 @@ export const course = {
           ],
           tasks: [
             { id: "5-watch", label: "Watch video" },
+            { id: "5-summary", label: "Read video summary" },
             { id: "5-manual", label: "Manual backprop through full network" },
             { id: "5-derivations", label: "Complete all gradient derivations" }
           ],
@@ -140,6 +150,7 @@ export const course = {
           title: "Building a WaveNet",
           duration: "56m",
           videoId: "t3YJ5hKiMQ0",
+          summaryFile: "Building-makemore-Part-5-Building-a-WaveNet.md",
           description: "Tree-like hierarchical architecture, convolutional neural networks. Deep dive into torch.nn internals.",
           topics: [
             "Hierarchical/tree architectures",
@@ -150,6 +161,7 @@ export const course = {
           ],
           tasks: [
             { id: "6-watch", label: "Watch video" },
+            { id: "6-summary", label: "Read video summary" },
             { id: "6-implement", label: "Implement hierarchical model" },
             { id: "6-torchnn", label: "Understand torch.nn internals" }
           ],
@@ -163,6 +175,7 @@ export const course = {
           title: "Let's build GPT",
           duration: "1h 56m",
           videoId: "kCc8FmEb1nY",
+          summaryFile: "Let's-build-GPT-from-scratch,-in-code,-spelled-out.md",
           description: "Build GPT from scratch following \"Attention is All You Need\". Self-attention, transformer blocks, training loop.",
           topics: [
             "Self-attention mechanism",
@@ -174,6 +187,7 @@ export const course = {
           ],
           tasks: [
             { id: "7-watch", label: "Watch video" },
+            { id: "7-summary", label: "Read video summary" },
             { id: "7-implement", label: "Implement GPT from scratch" },
             { id: "7-train", label: "Train on Shakespeare dataset" }
           ],
@@ -186,9 +200,35 @@ export const course = {
         },
         {
           id: 8,
+          title: "State of GPT",
+          duration: "42m",
+          videoId: "bZQun8Y4L2A",
+          summaryFile: "State-of-GPT-BRK216HFS.md",
+          description: "Deep dive into how GPT assistants are trained: pretraining, supervised finetuning, RLHF, and practical prompting strategies.",
+          topics: [
+            "LLM training pipeline",
+            "Pretraining at scale",
+            "Supervised Fine-Tuning (SFT)",
+            "Reinforcement Learning from Human Feedback (RLHF)",
+            "Prompt engineering strategies",
+            "Chain-of-thought reasoning"
+          ],
+          tasks: [
+            { id: "8-watch", label: "Watch video" },
+            { id: "8-summary", label: "Read video summary" },
+            { id: "8-understand", label: "Understand training pipeline" }
+          ],
+          codeFiles: [],
+          resources: [
+            { label: "Microsoft Build 2023 Talk", url: "https://www.youtube.com/watch?v=bZQun8Y4L2A" }
+          ]
+        },
+        {
+          id: 9,
           title: "GPT Tokenizer",
           duration: "2h 13m",
           videoId: "zduSFxRajkE",
+          summaryFile: "Let's-build-the-GPT-Tokenizer.md",
           description: "Build BPE tokenizer from scratch. Understanding tokenization's role in LLM behavior and limitations.",
           topics: [
             "Byte Pair Encoding (BPE)",
@@ -198,14 +238,43 @@ export const course = {
             "Tokenization artifacts in LLMs"
           ],
           tasks: [
-            { id: "8-watch", label: "Watch video" },
-            { id: "8-implement", label: "Implement BPE tokenizer" },
-            { id: "8-issues", label: "Understand tokenization issues" }
+            { id: "9-watch", label: "Watch video" },
+            { id: "9-summary", label: "Read video summary" },
+            { id: "9-implement", label: "Implement BPE tokenizer" },
+            { id: "9-issues", label: "Understand tokenization issues" }
           ],
           codeFiles: ["code/tokenizer/bpe.py"],
           resources: [
             { label: "minbpe repo", url: "https://github.com/karpathy/minbpe" },
             { label: "BPE for NLP paper", url: "https://arxiv.org/abs/1508.07909" }
+          ]
+        },
+        {
+          id: 10,
+          title: "Reproducing GPT-2",
+          duration: "4h 1m",
+          videoId: "l8pRSuU81PU",
+          summaryFile: "Let's-reproduce-GPT-2-(124M).md",
+          description: "Reproduce GPT-2 (124M) from scratch. Complete training pipeline with modern optimizations: mixed precision, Flash Attention, DDP.",
+          topics: [
+            "GPT-2 architecture implementation",
+            "Mixed precision training (BF16)",
+            "torch.compile optimization",
+            "Flash Attention",
+            "Distributed Data Parallel (DDP)",
+            "Gradient accumulation",
+            "HellaSwag evaluation"
+          ],
+          tasks: [
+            { id: "10-watch", label: "Watch video" },
+            { id: "10-summary", label: "Read video summary" },
+            { id: "10-implement", label: "Implement GPT-2 training" },
+            { id: "10-optimize", label: "Apply performance optimizations" }
+          ],
+          codeFiles: ["code/gpt/gpt.py"],
+          resources: [
+            { label: "build-nanogpt repo", url: "https://github.com/karpathy/build-nanogpt" },
+            { label: "FineWeb-Edu dataset", url: "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu" }
           ]
         }
       ]

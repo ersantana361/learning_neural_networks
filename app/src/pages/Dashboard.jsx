@@ -20,7 +20,7 @@ export function Dashboard({ getLectureProgress, isLectureComplete, getOverallPro
         <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400">
           <div className="flex items-center gap-2">
             <BookOpen size={16} />
-            <span>8 Lectures</span>
+            <span>10 Lectures</span>
           </div>
           <div className="flex items-center gap-2">
             <Clock size={16} />

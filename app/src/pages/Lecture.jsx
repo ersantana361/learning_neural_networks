@@ -1,11 +1,20 @@
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Clock, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Clock, ExternalLink, Play, FileText, Code, BookOpen, CheckSquare, Pencil } from 'lucide-react';
 import { getLectureById, getAllLectures, getPartForLecture } from '../data/course';
 import { VideoPlayer } from '../components/VideoPlayer';
 import { TaskList } from '../components/TaskList';
 import { NotesEditor } from '../components/NotesEditor';
 import { CodeViewer } from '../components/CodeViewer';
+import { SummaryViewer } from '../components/SummaryViewer';
 import { ProgressBar } from '../components/ProgressBar';
+
+const tabs = [
+  { id: 'video', label: 'Video', icon: Play },
+  { id: 'summary', label: 'AI Summary', icon: FileText },
+  { id: 'notes', label: 'My Notes', icon: Pencil },
+  { id: 'code', label: 'Code', icon: Code },
+];
 
 export function Lecture({
   isTaskComplete,
@@ -17,6 +26,7 @@ export function Lecture({
   const { id } = useParams();
   const lecture = getLectureById(id);
   const allLectures = getAllLectures();
+  const [activeTab, setActiveTab] = useState('video');
 
   if (!lecture) {
     return (
@@ -36,9 +46,15 @@ export function Lecture({
   const prevLecture = currentIndex > 0 ? allLectures[currentIndex - 1] : null;
   const nextLecture = currentIndex < allLectures.length - 1 ? allLectures[currentIndex + 1] : null;
   const progress = getLectureProgress(lecture.id);
+  const hasCode = lecture.codeFiles && lecture.codeFiles.length > 0;
+
+  const availableTabs = tabs.filter(tab => {
+    if (tab.id === 'code') return hasCode;
+    return true;
+  });
 
   return (
-    <div className="p-8 max-w-5xl mx-auto">
+    <div className="p-8 max-w-6xl mx-auto">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
         <Link to="/" className="hover:text-white transition-colors">Home</Link>
@@ -50,9 +66,10 @@ export function Lecture({
 
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1 className="text-3xl font-bold text-white mb-3">
           {lecture.id}. {lecture.title}
         </h1>
+        <p className="text-gray-400 mb-4">{lecture.description}</p>
         <div className="flex items-center gap-4 text-gray-400">
           <div className="flex items-center gap-2">
             <Clock size={16} />
@@ -66,42 +83,90 @@ export function Lecture({
         </div>
       </div>
 
-      {/* Video */}
-      <section className="mb-8">
-        <VideoPlayer videoId={lecture.videoId} title={lecture.title} />
-      </section>
+      {/* Main Content Grid */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Left Column - Main Content */}
+        <div className="lg:col-span-2">
+          {/* Tabs */}
+          <div className="flex gap-1 mb-4 border-b border-gray-800 pb-px">
+            {availableTabs.map(tab => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors ${
+                    activeTab === tab.id
+                      ? 'bg-gray-800 text-emerald-400 border-b-2 border-emerald-400 -mb-px'
+                      : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                  }`}
+                >
+                  <Icon size={16} />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
 
-      {/* Two Column Layout */}
-      <div className="grid gap-8 lg:grid-cols-2">
-        {/* Left Column */}
-        <div className="space-y-8">
-          {/* Tasks */}
-          <section>
-            <h2 className="text-lg font-semibold text-white mb-3">Tasks</h2>
+          {/* Tab Content */}
+          <div className="bg-gray-800/30 rounded-xl p-4 min-h-[400px]">
+            {activeTab === 'video' && (
+              <VideoPlayer videoId={lecture.videoId} title={lecture.title} />
+            )}
+            {activeTab === 'summary' && (
+              <SummaryViewer summaryFile={lecture.summaryFile} />
+            )}
+            {activeTab === 'notes' && (
+              <NotesEditor
+                lectureId={lecture.id}
+                value={getNote(lecture.id)}
+                onChange={updateNote}
+              />
+            )}
+            {activeTab === 'code' && hasCode && (
+              <CodeViewer files={lecture.codeFiles} />
+            )}
+          </div>
+        </div>
+
+        {/* Right Column - Sidebar */}
+        <div className="space-y-6">
+          {/* Tasks Card */}
+          <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+            <div className="flex items-center gap-2 mb-3">
+              <CheckSquare size={18} className="text-emerald-400" />
+              <h2 className="text-lg font-semibold text-white">Tasks</h2>
+            </div>
             <TaskList
               tasks={lecture.tasks}
               isTaskComplete={isTaskComplete}
               onToggle={toggleTask}
             />
-          </section>
+          </div>
 
-          {/* Topics */}
-          <section>
-            <h2 className="text-lg font-semibold text-white mb-3">Key Concepts</h2>
+          {/* Key Concepts Card */}
+          <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+            <div className="flex items-center gap-2 mb-3">
+              <BookOpen size={18} className="text-emerald-400" />
+              <h2 className="text-lg font-semibold text-white">Key Concepts</h2>
+            </div>
             <ul className="space-y-2">
               {lecture.topics.map((topic, i) => (
-                <li key={i} className="flex items-start gap-2 text-gray-300">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mt-2 flex-shrink-0" />
+                <li key={i} className="flex items-start gap-2 text-gray-300 text-sm">
+                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mt-1.5 flex-shrink-0" />
                   {topic}
                 </li>
               ))}
             </ul>
-          </section>
+          </div>
 
-          {/* Resources */}
+          {/* Resources Card */}
           {lecture.resources && lecture.resources.length > 0 && (
-            <section>
-              <h2 className="text-lg font-semibold text-white mb-3">Resources</h2>
+            <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+              <div className="flex items-center gap-2 mb-3">
+                <ExternalLink size={18} className="text-emerald-400" />
+                <h2 className="text-lg font-semibold text-white">Resources</h2>
+              </div>
               <div className="space-y-2">
                 {lecture.resources.map((resource, i) => (
                   <a
@@ -109,34 +174,17 @@ export function Lecture({
                     href={resource.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors"
+                    className="flex items-center gap-2 text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
                   >
-                    <ExternalLink size={14} />
+                    <ExternalLink size={12} />
                     {resource.label}
                   </a>
                 ))}
               </div>
-            </section>
+            </div>
           )}
         </div>
-
-        {/* Right Column - Notes */}
-        <div>
-          <NotesEditor
-            lectureId={lecture.id}
-            value={getNote(lecture.id)}
-            onChange={updateNote}
-          />
-        </div>
       </div>
-
-      {/* Code Viewer */}
-      {lecture.codeFiles && lecture.codeFiles.length > 0 && (
-        <section className="mt-8">
-          <h2 className="text-lg font-semibold text-white mb-3">Implementation</h2>
-          <CodeViewer files={lecture.codeFiles} />
-        </section>
-      )}
 
       {/* Navigation */}
       <nav className="flex justify-between mt-12 pt-8 border-t border-gray-800">

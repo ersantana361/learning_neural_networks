@@ -9,6 +9,7 @@ export default defineConfig({
     host: true,
     port: 5173,
     allowedHosts: ['neural-networks.tunnel.ersantana.com'],
+    hmr: false,
     watch: {
       usePolling: true
     },

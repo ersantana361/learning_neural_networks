@@ -16,6 +16,16 @@ export default defineConfig({
     fs: {
       // Allow serving files from the parent directory (for code files)
       allow: ['..']
+    },
+    proxy: {
+      '/api': {
+        target: 'http://backend:8000',
+        changeOrigin: true,
+      },
+      '/ws': {
+        target: 'ws://backend:8000',
+        ws: true,
+      }
     }
   },
   resolve: {

@@ -12,8 +12,52 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
     stdin_open: true
     tty: true
+
+  # FastAPI Backend for code execution
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nnuser:nnpass@postgres:5432/nn_platform
+      - EXECUTOR_IMAGE=nn-executor:latest
+      - MAX_EXECUTION_TIME=30
+      - MAX_MEMORY_MB=512
+    depends_on:
+      - postgres
+    networks:
+      - default
+      - executor_network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=nnuser
+      - POSTGRES_PASSWORD=nnpass
+      - POSTGRES_DB=nn_platform
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Executor image (build only, not run as service)
+  executor:
+    build:
+      context: ./executor
+      dockerfile: Dockerfile
+    image: nn-executor:latest
+    profiles:
+      - build-only
 
   # Python/Jupyter for neural network development
   jupyter:
@@ -30,3 +74,10 @@ services:
     environment:
       - JUPYTER_ENABLE_LAB=yes
     command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+
+volumes:
+  postgres_data:
+
+networks:
+  executor_network:
+    driver: bridge

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Clock, ExternalLink, Play, FileText, Code, BookOpen, CheckSquare, Pencil } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Clock, ExternalLink, Play, FileText, Code, BookOpen, CheckSquare, Pencil, Terminal } from 'lucide-react';
 import { getLectureById, getAllLectures, getPartForLecture } from '../data/course';
 import { VideoPlayer } from '../components/VideoPlayer';
 import { TaskList } from '../components/TaskList';
 import { NotesEditor } from '../components/NotesEditor';
 import { CodeViewer } from '../components/CodeViewer';
 import { SummaryViewer } from '../components/SummaryViewer';
+import { CodeExecutor } from '../components/CodeExecutor';
 import { ProgressBar } from '../components/ProgressBar';
 
 const tabs = [
@@ -14,6 +15,7 @@ const tabs = [
   { id: 'summary', label: 'AI Summary', icon: FileText },
   { id: 'notes', label: 'My Notes', icon: Pencil },
   { id: 'code', label: 'Code', icon: Code },
+  { id: 'playground', label: 'Playground', icon: Terminal },
 ];
 
 export function Lecture({
@@ -49,7 +51,7 @@ export function Lecture({
   const hasCode = lecture.codeFiles && lecture.codeFiles.length > 0;
 
   const availableTabs = tabs.filter(tab => {
-    if (tab.id === 'code') return hasCode;
+    if (tab.id === 'code' || tab.id === 'playground') return hasCode;
     return true;
   });
 
@@ -125,6 +127,12 @@ export function Lecture({
             )}
             {activeTab === 'code' && hasCode && (
               <CodeViewer files={lecture.codeFiles} />
+            )}
+            {activeTab === 'playground' && hasCode && (
+              <CodeExecutor
+                lectureId={lecture.id}
+                initialCode={`# ${lecture.title} - Playground\n# Write and run your Python code here\n\nprint("Hello, Neural Networks!")\n`}
+              />
             )}
           </div>
         </div>
